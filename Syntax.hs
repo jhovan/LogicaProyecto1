@@ -13,13 +13,41 @@ data Prop = TTrue
           | Imp Prop Prop
           | Equiv Prop Prop
 
+    
+instance Show Prop where
+    show phi = case phi of
+        TTrue -> "T"
+        FFalse -> "F"
+        V x -> show x
+        Neg p -> "(~" ++ show p ++ ")"
+        Conj p q -> "(" ++ show p ++ " ^ " ++ show q ++ ")"
+        Disy p q -> "(" ++ show p ++ " v " ++ show q ++ ")"
+        Imp p q -> "(" ++ show p ++ " -> " ++ show q ++ ")"
+        Equiv p q -> "(" ++ show p ++ " <-> " ++ show q ++ ")"
+    
+
 
 elimEquiv :: Prop -> Prop
-elimEquiv (Equiv p q) = Conj (Imp p q) (Im q p)
---para cualquier otro caso
-elimEquiv p = p
+elimEquiv phi = case phi of
+
+    Neg p -> Neg (elimEquiv p)
+    Conj p q -> Conj (elimEquiv p) (elimEquiv q)
+    Disy p q -> Disy (elimEquiv p) (elimEquiv q)
+    Imp p q -> Imp (elimEquiv p) (elimEquiv q)
+    Equiv p q -> Conj (Imp p' q') (Imp q' p')
+        where p' = elimEquiv p
+              q' = elimEquiv q
+    -- culquier otro caso
+    _ -> phi 
 
 elimImp :: Prop -> Prop
-elimImp(Imp p q) = Disy (Neg p) q
---para cualquier otro caso 
-elimImp p = p 
+elimImp phi = case phi of
+
+    Neg p -> Neg (elimImp p)
+    Conj p q -> Conj (elimImp p) (elimImp q)
+    Disy p q -> Disy (elimImp p) (elimImp q)
+    Imp p q -> Disy (Neg(elimImp p)) (elimImp q)
+    Equiv p q -> Equiv (elimImp p) (elimImp q)
+    -- culquier otro caso
+    _ -> phi 
+
