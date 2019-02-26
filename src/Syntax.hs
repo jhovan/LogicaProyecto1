@@ -14,6 +14,7 @@ data Prop = TTrue
           | Equiv Prop Prop
 
     
+-- Nos permite imrpimir formulas de logica proposicional
 instance Show Prop where
     show phi = case phi of
         TTrue -> "T"
@@ -26,7 +27,7 @@ instance Show Prop where
         Equiv p q -> "(" ++ show p ++ " <-> " ++ show q ++ ")"
     
 
-
+-- Elimina las equivalencias de una formula
 elimEquiv :: Prop -> Prop
 elimEquiv phi = case phi of
 
@@ -40,6 +41,7 @@ elimEquiv phi = case phi of
     -- culquier otro caso
     _ -> phi 
 
+-- Elimina implicaciones de una formula
 elimImp :: Prop -> Prop
 elimImp phi = case phi of
 
@@ -67,6 +69,7 @@ meteNeg phi = case phi of
     Conj p q -> Conj (meteNeg p) (meteNeg q)
     Disy p q -> Disy (meteNeg p) (meteNeg q)
 
+-- Obtiene la fnn de una formula
 fnn :: Prop -> Prop
 fnn = meteNeg.elimImp.elimEquiv
 
@@ -88,5 +91,6 @@ dist phi = case phi of
         where p' = dist p
               q' = dist q
 
+-- Obtiene la fnc de una formula
 fnc :: Prop -> Prop
 fnc = dist.fnn
