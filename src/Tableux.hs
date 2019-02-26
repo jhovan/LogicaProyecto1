@@ -39,5 +39,6 @@ satisf_aux tab l =  case tab of
                      else satisf_aux t ((-x):l)
     Dos t1 t2 -> (satisf_aux t1 l) || (satisf_aux t2 l)
 
+-- Regresa verdadero si una formula es satisfacible
 satisf_tab :: Prop -> Bool
 satisf_tab phi = satisf_aux (trans (fnn phi)) []
