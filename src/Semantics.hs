@@ -62,8 +62,6 @@ insatisfConj :: [Prop] -> Bool
 insatisfConj l = contrad (pega l)
 
 
---Seguirle igual con las otras funciones
-
 -- 4.
 
 equiv :: Prop -> Prop -> Bool
@@ -76,8 +74,6 @@ equiv phi psi = tautologia (Equiv phi psi)
 consecuencia :: [Prop] -> Prop -> Bool
 consecuencia gamma phi = insatisfConj (Neg phi : gamma)
 
--- Terminamos nota 2
--- Agregar semantics y syntax al repositorio
 
 -- Auxiliares
 
